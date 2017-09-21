@@ -1,14 +1,12 @@
 package ai.grakn.graknmodule.test.fixture;
 
 import ai.grakn.graknmodule.GraknModule;
-import ai.grakn.graknmodule.http.Before;
-import ai.grakn.graknmodule.http.BeforeHttpEndpoint;
+import ai.grakn.graknmodule.http.HttpBeforeFilterResult;
+import ai.grakn.graknmodule.http.HttpBeforeFilter;
 import ai.grakn.graknmodule.http.HttpEndpoint;
 import ai.grakn.graknmodule.http.HttpMethods;
-import ai.grakn.graknmodule.http.Request;
-import ai.grakn.graknmodule.http.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ai.grakn.graknmodule.http.HttpRequest;
+import ai.grakn.graknmodule.http.HttpResponse;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
@@ -35,45 +33,36 @@ public class DummyModule extends Plugin {
             return "dummy-module";
         }
 
-        @Override
         public List<HttpEndpoint> getHttpEndpoints() {
             return Arrays.asList(dummy);
         }
 
-        @Override
-        public List<BeforeHttpEndpoint> getBeforeHttpEndpoints() {
+        public List<HttpBeforeFilter> getHttpBeforeFilters() {
             return Arrays.asList(beforeHttpEndpoint);
         }
     }
 
     private static HttpEndpoint dummy = new HttpEndpoint() {
-        @Override
         public HttpMethods.HTTP_METHOD getHttpMethod() {
             return HttpMethods.HTTP_METHOD.GET;
         }
 
-        @Override
         public String getEndpoint() {
             return "/dummy-endpoint";
         }
 
-        @Override
-        public Response getRequestHandler(Request request) {
-            return new Response(200, "dummy-endpoint-response");
+        public HttpResponse getRequestHandler(HttpRequest request) {
+            return new HttpResponse(200, "dummy-endpoint-response");
         }
     };
 
-    private static BeforeHttpEndpoint beforeHttpEndpoint = new BeforeHttpEndpoint() {
-        private final Logger LOG = LoggerFactory.getLogger(BeforeHttpEndpoint.class);
-
-        @Override
+    private static HttpBeforeFilter beforeHttpEndpoint = new HttpBeforeFilter() {
         public String getUrlPattern() {
             return "/before-http-endpoint-pattern";
         }
 
-        @Override
-        public Before getBeforeHttpEndpoint(Request request) {
-            return Before.allow();
+        public HttpBeforeFilterResult getHttpBeforeFilter(HttpRequest request) {
+            return HttpBeforeFilterResult.allowRequest();
         }
     };
 }
