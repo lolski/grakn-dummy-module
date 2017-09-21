@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Built-By: lolski
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_74
+Plugin-Class: ai.grakn.graknmodule.test.fixture.DummyModule
+Plugin-Dependencies: 
+Plugin-Id: dummy-module
+Plugin-Provider: GRAKN.AI
+Plugin-Version: 0.0.1
